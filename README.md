@@ -51,6 +51,17 @@ curl -sL "https://www.youtube.com/@Fireship" | grep -o '"externalId":"UC[^"]*"' 
 
 or let the API find it for you with `/resolve`.
 
+## Part of a three-repository setup
+
+| Repository | Role | Where it runs |
+|---|---|---|
+| **`youtube-rss-api`** (this one) | resolve channels and videos, serve RSS | server with a domain |
+| `youtube-dub-codespace` | download, Demucs separation, WhisperX, translation | GitHub Codespaces |
+| `youtube-dub-colab` | GPT-SoVITS voice synthesis, mixing, lip-sync | Google Colab |
+
+`/resolve` and `/channels/<key>/videos` are what feed the dubbing pipeline with
+source URLs.
+
 ## Configuration
 
 `channels.json` is the channel list and is rewritten by the API:
