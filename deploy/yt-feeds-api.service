@@ -6,10 +6,11 @@ Wants=network-online.target
 [Service]
 Type=simple
 WorkingDirectory=/opt/yt-feeds
-# Replace both values before installing. YT_API_TOKEN is the shared secret that
-# nginx also enforces on /yt/ for feed subscriptions.
-Environment=YT_API_TOKEN=changeme
-Environment=YT_FEEDS_PUBLIC_BASE=https://feeds.example.com/yt
+# Secrets live in /etc/default/yt-feeds-api (chmod 600), not in this world-readable
+# unit file. Create it with:
+#   YT_API_TOKEN=<long random string>
+#   YT_FEEDS_PUBLIC_BASE=https://feeds.example.com/yt
+EnvironmentFile=/etc/default/yt-feeds-api
 ExecStart=/usr/bin/python3 /opt/yt-feeds/api.py
 Restart=always
 RestartSec=5

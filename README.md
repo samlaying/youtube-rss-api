@@ -139,10 +139,22 @@ curl -s -X DELETE -H "X-API-Token: $T" "$B/channels?keys=veritasium-science,mkbh
 
 `deploy/` contains ready-to-adapt files:
 
-- `yt-feeds-api.service` — systemd unit for `api.py` (bound to 127.0.0.1)
+- `yt-feeds-api.service` — systemd unit for `api.py` (bound to 127.0.0.1), reading
+  `/etc/default/yt-feeds-api` for the token
 - `cron.d-yt-feeds` — hourly refresh
 - `nginx-yt.conf` — static feed route with a token check, plus reverse proxy for `/yt/api/`
 - `logrotate-yt-feeds` — log rotation for the cron output
+
+Install roughly like this:
+
+```bash
+sudo mkdir -p /opt/yt-feeds && sudo cp generate.py api.py channels.json /opt/yt-feeds/
+printf 'YT_API_TOKEN=%s\nYT_FEEDS_PUBLIC_BASE=https://feeds.example.com/yt\n' "$(openssl rand -hex 16)" \
+  | sudo tee /etc/default/yt-feeds-api >/dev/null && sudo chmod 600 /etc/default/yt-feeds-api
+sudo cp deploy/yt-feeds-api.service /etc/systemd/system/ && sudo systemctl enable --now yt-feeds-api
+sudo cp deploy/cron.d-yt-feeds /etc/cron.d/yt-feeds     # edit the domain first
+sudo cp deploy/nginx-yt.conf /etc/nginx/snippets/      # include it inside your server block
+```
 
 The nginx snippet repeats the token so feeds can be subscribed to in a reader without HTTP auth.
 Keep it in sync with `YT_API_TOKEN`, or drop the `if ($arg_token ...)` line if the feeds are public.
