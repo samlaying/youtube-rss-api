@@ -1,0 +1,18 @@
+[Unit]
+Description=youtube-rss-api HTTP API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/yt-feeds
+# Replace both values before installing. YT_API_TOKEN is the shared secret that
+# nginx also enforces on /yt/ for feed subscriptions.
+Environment=YT_API_TOKEN=changeme
+Environment=YT_FEEDS_PUBLIC_BASE=https://feeds.example.com/yt
+ExecStart=/usr/bin/python3 /opt/yt-feeds/api.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

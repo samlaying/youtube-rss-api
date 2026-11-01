@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+
+# Runtime data: channels.json is config and stays tracked, the rest is generated
+state.json
+cache/
+feeds/
+*.log
+
+.DS_Store

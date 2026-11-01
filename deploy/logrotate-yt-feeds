@@ -1,0 +1,8 @@
+/var/log/yt-feeds.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+    copytruncate
+}

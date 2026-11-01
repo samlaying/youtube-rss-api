@@ -1,0 +1,4 @@
+# Refresh YouTube RSS feeds hourly.
+# YT_FEEDS_PUBLIC_BASE must match the public URL prefix of the feeds.
+YT_FEEDS_PUBLIC_BASE=https://feeds.example.com/yt
+17 * * * * root cd /opt/yt-feeds && /usr/bin/python3 generate.py >> /var/log/yt-feeds.log 2>&1
